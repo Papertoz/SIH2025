@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoQuest Punjab - Gamified Environmental Education Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --punjab-green: #138808;
+            --punjab-saffron: #FF9933;
+            --punjab-blue: #2d5a87;
+            --punjab-light: #f8f9fa;
+            --punjab-dark: #343a40;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .govt-banner {
+            background: linear-gradient(to right, var(--punjab-saffron), white, var(--punjab-green));
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            color: var(--punjab-dark);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--punjab-blue);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--punjab-green);
+            font-weight: 500;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            background: linear-gradient(45deg, var(--punjab-green), #2E8B57);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .user-info::before {
+            content: "🏆";
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--punjab-green), #2E8B57);
+            color: white;
+            padding: 3rem 0;
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="30" r="1.5" fill="white" opacity="0.1"/><circle cx="60" cy="70" r="1" fill="white" opacity="0.1"/></svg>');
+            pointer-events: none;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .game-interface {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .level-display {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .level-display h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            height: 100%;
+            width: 75%;
+            border-radius: 5px;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #333;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Activities Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .activity-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: var(--punjab-green);
+        }
+
+        .activity-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-card h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .quiz-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .reforestation-card { background: linear-gradient(135deg, #56ab2f, #a8e6cf); }
+        .recycling-card { background: linear-gradient(135deg, #00c6ff, #0072ff); color: white; }
+
+        /* Punjab Initiatives Section */
+        .initiatives-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--punjab-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .initiatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .initiative-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .initiative-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .initiative-img {
+            height: 200px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--punjab-green);
+        }
+
+        .initiative-content {
+            padding: 1.5rem;
+        }
+
+        .initiative-content h3 {
+            color: var(--punjab-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .initiative-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--punjab-blue), #1e3c72);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: #FFD700;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--punjab-light);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-details h4 {
+            color: var(--punjab-blue);
+        }
+
+        .author-details p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            background: linear-gradient(135deg, var(--punjab-green), #2E8B57);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .partner-logo {
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 20px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .cta-btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-btn.primary {
+            background: white;
+            color: #FF6B35;
+            border: none;
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--punjab-blue), #1e3c72);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Government Banner -->
+    <div class="govt-banner">
+        Government of Punjab - Environment Protection Department
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-img">
+                        <i class="fas fa-leaf" style="font-size: 2.5rem; color: var(--punjab-green);"></i>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-main">EcoQuest Punjab</div>
+                        <div class="logo-sub">Green Punjab Mission</div>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#missions">Missions</a></li>
+                        <li><a href="#initiatives">Initiatives</a></li>
+                        <li><a href="#leaderboard">Leaderboard</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">2570 Points</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section" id="home">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>PUNJAB ENVIRONMENTAL QUEST</h1>
+                    <p>Join Punjab's ultimate gamified learning experience that transforms environmental education into an exciting adventure. Complete missions, earn points, and become an eco-warrior for a greener Punjab!</p>
+                    <p>Supported by Punjab Pollution Control Board & Department of Environment</p>
+                </div>
+                <div class="game-interface">
+                    <div class="level-display">
+                        <h2>LEVEL 3</h2>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <p>🌟 Punjab Eco Warrior Status</p>
+                    </div>
+                    <button class="start-btn" onclick="startQuest()">START MISSION</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Grid -->
+        <div class="activity-grid">
+            <div class="activity-card quiz-card" onclick="openQuiz()">
+                <div class="activity-icon">❓</div>
+                <h3>ECO QUIZ</h3>
+                <p>Test your environmental knowledge with Punjab-specific quizzes</p>
+                <div style="margin-top: 1rem;">⭐⭐⭐</div>
+            </div>
+            <div class="activity-card reforestation-card" onclick="openReforestation()">
+                <div class="activity-icon">🌳</div>
+                <h3>GREEN PUNJAB MISSION</h3>
+                <p>Learn about Punjab's reforestation efforts and track real plantations</p>
+            </div>
+            <div class="activity-card recycling-card" onclick="openRecycling()">
+                <div class="activity-icon">♻️</div>
+                <h3>WASTE MANAGEMENT</h3>
+                <p>Master waste segregation and learn about Punjab's recycling initiatives</p>
+            </div>
+        </div>
+
+        <!-- Punjab Initiatives Section -->
+        <section class="initiatives-section" id="initiatives">
+            <div class="section-header">
+                <h2>Punjab's Environmental Initiatives</h2>
+                <p>Discover the various programs and campaigns by the Government of Punjab to protect our environment</p>
+            </div>
+            <div class="initiatives-grid">
+                <div class="initiative-card">
+                    <div class="initiative-img">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="initiative-content">
+                        <h3>Clean Water Punjab</h3>
+                        <p>Revitalizing Punjab's water bodies and promoting water conservation practices across the state.</p>
+                        <button class="cta-btn secondary">Learn More</button>
+                    </div>
+                </div>
+                <div class="initiative-card">
+                    <div class="initiative-img">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="initiative-content">
+                        <h3>Clean Air Punjab</h3>
+                        <p>Combating air pollution through innovative measures and public awareness campaigns.</p>
+                        <button class="cta-btn secondary">Learn More</button>
+                    </div>
+                </div>
+                <div class="initiative-card">
+                    <div class="initiative-img">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="initiative-content">
+                        <h3>Green Punjab Mission</h3>
+                        <p>Large-scale tree plantation drive to increase Punjab's green cover and combat climate change.</p>
+                        <button class="cta-btn secondary">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="section-header">
+                <h2>Why Join EcoQuest Punjab?</h2>
+                <p>Discover the benefits of participating in Punjab's premier environmental education platform</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Educational</h3>
+                    <p>Learn about environmental issues specific to Punjab with curated content.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Gamified</h3>
+                    <p>Earn badges, points, and rewards as you complete environmental challenges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community</h3>
+                    <p>Join a growing community of eco-warriors across Punjab.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Recognition</h3>
+                    <p>Get certificates and recognition from the Punjab Government.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="section-header">
+                <h2>Punjab's Environmental Progress</h2>
+                <p>Tracking our collective impact on Punjab's environment</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>2.5M+</h3>
+                    <p>Trees Planted</p>
+                </div>
+                <div class="stat-item">
+                    <h3>75K+</h3>
+                    <p>Active Participants</p>
+                </div>
+                <div class="stat-item">
+                    <h3>250+</h3>
+                    <p>Villages Covered</p>
+                </div>
+                <div class="stat-item">
+                    <h3>35%</h3>
+                    <p>Waste Reduction</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="section-header">
+                <h2>What Participants Say</h2>
+                <p>Hear from Punjab's eco-warriors who are making a difference</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "EcoQuest Punjab has transformed how I view environmental issues. The gamified approach makes learning fun, and I'm proud to contribute to my state's green initiatives."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-details">
+                            <h4>Jaspreet Singh</h4>
+                            <p>Student, Ludhiana</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As a teacher, I've integrated EcoQuest into my curriculum. My students are now more aware of environmental issues and actively participate in Punjab's green mission."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-details">
+                            <h4>Priya Sharma</h4>
+                            <p>Teacher, Amritsar</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "This platform has helped our village understand waste management better. We've significantly reduced pollution in our local water bodies thanks to the knowledge gained."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-details">
+                            <h4>Gurpreet Kaur</h4>
+                            <p>Sarpanch, Rupnagar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="partners-section">
+            <div class="section-header">
+                <h2>Our Partners</h2>
+                <p>Collaborating for a greener Punjab</p>
+            </div>
+            <div class="partners-grid">
+                <div class="partner-logo">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-school"></i>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-tree"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to make Punjab greener?</h2>
+                <p>Join thousands of Punjabis who are already making a difference in their communities through environmental action.</p>
+                <div class="cta-buttons">
+                    <button class="cta-btn primary">Register Now</button>
+                    <button class="cta-btn secondary">Learn More</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>EcoQuest Punjab</h3>
+                    <p>A Government of Punjab initiative to promote environmental education and sustainable practices across the state.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#missions">Missions</a></li>
+                        <li><a href="#initiatives">Initiatives</a></li>
+                        <li><a href="#leaderboard">Leaderboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Educational Materials</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Punjab Environmental Laws</a></li>
+                        <li><a href="#">Annual Reports</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Environment Department, Chandigarh</li>
+                        <li><i class="fas fa-phone"></i> 0172-1234567</li>
+                        <li><i class="fas fa-envelope"></i> info@ecoquestpunjab.gov.in</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Government of Punjab, Environment Protection Department. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function startQuest() {
+            alert("Starting your environmental mission! Let's make Punjab greener!");
+            // Additional functionality would be implemented here
+        }
+
+        function openQuiz() {
+            alert("Opening Punjab Environmental Quiz!");
+            // Additional functionality would be implemented here
+        }
+
+        function openReforestation() {
+            alert("Learning about Punjab's Reforestation efforts!");
+            // Additional functionality would be implemented here
+        }
+
+        function openRecycling() {
+            alert("Exploring Waste Management in Punjab!");
+            // Additional functionality would be implemented here
+        }
+    </script>
+</body>
+</html>
