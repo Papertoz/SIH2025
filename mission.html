@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missions - EcoQuest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0d0d0d, #1a0033);
+      color: #e0e0e0;
+    }
+
+    header {
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      color: #00ffff;
+      text-shadow: 0 0 8px #00ffff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #e0e0e0;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav a:hover, nav a.active {
+      color: #ff00ff;
+      text-shadow: 0 0 6px #ff00ff;
+    }
+
+    .user-info {
+      background: #ff00ff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      box-shadow: 0 0 8px #ff00ff;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    main {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+      text-shadow: 0 0 12px #00ffff;
+    }
+
+    .missions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .mission-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    .mission-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: #ff00ff;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 6px #ff00ff;
+    }
+
+    footer {
+      background: rgba(20, 20, 20, 0.8);
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🌍 EcoQuest</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="missions.html" class="active">Missions</a></li>
+        <li><a href="initiatives.html">Initiatives</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="user-info">2570 XP</div>
+  </header>
+
+  <main>
+    <h1>⚡ Eco Missions</h1>
+    <p>Take on exciting challenges to save the planet in style.</p>
+
+    <div class="missions-grid">
+      <div class="mission-card">
+        <h3>🌱 Reduce Plastic</h3>
+        <p>Cut down single-use plastic in your daily routine.</p>
+      </div>
+      <div class="mission-card">
+        <h3>💡 Save Energy</h3>
+        <p>Practice ways to save electricity at home and school.</p>
+      </div>
+      <div class="mission-card">
+        <h3>💧 Water Warrior</h3>
+        <p>Join fun activities that promote water conservation.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 EcoQuest. All rights reserved.</p>
+  </footer>
+</body>
+</html>

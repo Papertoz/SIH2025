@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VeriVend - Vendor Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background-color: #1e985f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header, footer {
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  header h1 {
+    color: #1a202c;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+  }
+
+  .container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input {
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #f9fafb;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input:focus {
+    border-color: #2563eb;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  button {
+    padding: 12px;
+    background-color: #2563eb;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 12px;
+  }
+
+  button:hover {
+    background-color: #1e40af;
+  }
+
+  .otp-boxes {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 12px 0 20px;
+  }
+
+  .otp-input {
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+  }
+
+  .otp-input:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .message {
+    text-align: center;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+
+  .success {
+    color: #16a34a;
+  }
+
+  .error {
+    color: #dc2626;
+  }
+
+  footer {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+    color: #6b7280;
+    font-size: 14px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 20px 15px;
+    }
+
+    .otp-boxes {
+      gap: 5px;
+    }
+
+    .otp-input {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>EcoQuest Login</h1>
+  </header>
+
+  <main>
+    <div class="container">
+      <div id="message" class="message"></div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <button type="button" onclick="sendOTP()">Send OTP</button>
+        <button type="button" onclick="showForgotPassword()">Forgot Password?</button>
+      </form>
+
+      <!-- ✅ Google Sign-In button added below -->
+      <div style="margin: 10px 0; text-align: center;">
+        <p style="margin-bottom: 8px;">or</p>
+        <button onclick="handleGoogleSignIn()" style="
+          padding: 10px 15px;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          background-color: white;
+          color: #1a202c;
+          font-weight: 500;
+          font-size: 14px;
+          cursor: pointer;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        ">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px; height:20px;" />
+          Sign in with Google
+        </button>
+      </div>
+
+      <!-- OTP Form -->
+      <form id="otp-form" class="hidden">
+        <label>Enter OTP</label>
+        <div class="otp-boxes">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+        </div>
+        <button type="button" onclick="verifyOTP()">Verify & Login</button>
+        <button type="button" id="resend-login-btn" onclick="resendOTP('login')" disabled>Resend OTP (30s)</button>
+      </form>
+
+      <!-- Forgot Password Form -->
+      <form id="forgot-form" class="hidden">
+        <input type="email" id="forgot-email" placeholder="Enter your email" required />
+        <button type="button" onclick="sendForgotOTP()">Send OTP</button>
+      </form>
+
+      <!-- OTP for Forgot Password -->
+      <form id="forgot-otp-form" class="hidden">
+        <label>Enter OTP</label>
+        <div class="otp-boxes">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveNext(event)">
+        </div>
+        <button type="button" onclick="verifyForgotOTP()">Verify & Reset</button>
+        <button type="button" id="resend-forgot-btn" onclick="resendOTP('forgot')" disabled>Resend OTP (30s)</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 VeriVend. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function showMessage(msg, type) {
+      const el = document.getElementById('message');
+      el.textContent = msg;
+      el.className = `message ${type}`;
+    }
+
+    function moveNext(e) {
+      const parentForm = e.target.closest('form');
+      const inputs = parentForm.querySelectorAll('.otp-input');
+      const index = Array.from(inputs).indexOf(e.target);
+
+      if (e.inputType === "deleteContentBackward") {
+        if (index > 0) inputs[index - 1].focus();
+      } else if (e.target.value && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    }
+
+    function getOTPFromInputs(formId) {
+      const inputs = document.querySelectorAll(`#${formId} .otp-input`);
+      return Array.from(inputs).map(input => input.value).join('');
+    }
+
+    function sendOTP() {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        showMessage("Please enter your email.", "error");
+        return;
+      }
+
+      showMessage("OTP sent to your email.", "success");
+      document.getElementById('otp-form').classList.remove('hidden');
+      document.getElementById('forgot-form').classList.add('hidden');
+      startResendTimer('resend-login-btn');
+    }
+
+    function verifyOTP() {
+      const otp = getOTPFromInputs('otp-form');
+      if (otp.length < 6) {
+        showMessage("Please enter complete OTP.", "error");
+        return;
+      }
+
+      if (otp !== "123456") {
+        showMessage("Invalid OTP. Please try again.", "error");
+        return;
+      }
+
+      showMessage("Verified! Logging in...", "success");
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1000);
+    }
+
+    function showForgotPassword() {
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('forgot-form').classList.remove('hidden');
+      document.getElementById('otp-form').classList.add('hidden');
+      document.getElementById('forgot-otp-form').classList.add('hidden');
+    }
+
+    function sendForgotOTP() {
+      const email = document.getElementById('forgot-email').value;
+      if (!email) {
+        showMessage("Enter email to reset password.", "error");
+        return;
+      }
+
+      showMessage("OTP sent to your email for password reset.", "success");
+      document.getElementById('forgot-otp-form').classList.remove('hidden');
+      startResendTimer('resend-forgot-btn');
+    }
+
+    function verifyForgotOTP() {
+      const otp = getOTPFromInputs('forgot-otp-form');
+      if (otp.length < 6) {
+        showMessage("Enter complete OTP.", "error");
+        return;
+      }
+
+      if (otp !== "123456") {
+        showMessage("Invalid OTP. Please try again.", "error");
+        return;
+      }
+
+      showMessage("OTP verified. Redirecting to reset page...", "success");
+      setTimeout(() => {
+        window.location.href = 'reset-password.html';
+      }, 1000);
+    }
+
+    function startResendTimer(buttonId) {
+      let seconds = 30;
+      const btn = document.getElementById(buttonId);
+      btn.disabled = true;
+      btn.textContent = `Resend OTP (${seconds}s)`;
+
+      const interval = setInterval(() => {
+        seconds--;
+        btn.textContent = `Resend OTP (${seconds}s)`;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.textContent = `Resend OTP`;
+        }
+      }, 1000);
+    }
+
+    function resendOTP(type) {
+      if (type === 'login') {
+        showMessage("OTP resent to your email.", "success");
+        startResendTimer('resend-login-btn');
+      } else {
+        showMessage("OTP resent for password reset.", "success");
+        startResendTimer('resend-forgot-btn');
+      }
+    }
+
+    function handleGoogleSignIn() {
+      showMessage("Redirecting to Google Sign-In...", "success");
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
